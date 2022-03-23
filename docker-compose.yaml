@@ -1,0 +1,31 @@
+## docker-compose コマンド参考URL https://qiita.com/tegnike/items/bcdcee0320e11a928d46
+version: '3.8'
+services:
+  kobuki:
+    ## Download from docker hub
+    image: sarubito2020/kobuki_ros:latest
+    ## gpuを使用するための設定 gpu-support https://docs.docker.com/compose/gpu-support/
+    ## ENV NVIDIA_VISIBLE_DEVICES=all
+    ## ENV NVIDIA_DRIVER_CAPABILITIES=allと同義
+    container_name: kobuki
+    privileged: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: ["gpu"]
+    ## コンテナを起動し続ける
+    #tty: true
+    ## Dockerコンテナ内のGUIアプリを起動してホスト側に表示する https://zukucode.com/2019/07/docker-gui-show.html
+    ## ホスト側のディスプレイの環境変数をコンテナに引き継ぐ
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev:/dev
+      - ${PWD}:/root/WORKDIR
+
+    ## ネットワークをホストと同じIPに設定する https://hakengineer.xyz/2018/07/29/post-1475/
+    network_mode: "host"
