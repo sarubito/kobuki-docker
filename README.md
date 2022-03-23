@@ -6,4 +6,4 @@
 - ``` bash RUN-CONTAINER.sh ``` 起動
 
 ## 止め方
--ctrl + d
+- ctrl + d
