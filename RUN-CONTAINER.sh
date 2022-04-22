@@ -1,1 +1,2 @@
-docker-compose run --rm kobuki
+xhost +
+docker-compose up -d

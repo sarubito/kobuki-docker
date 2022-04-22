@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.2.0-cudnn8-devel-ubuntu18.04
+FROM ubuntu:18.04
 
 ARG CUDA_VERSION=cuda-11.2
 ARG ROS_VERSION=melodic
@@ -97,4 +97,9 @@ RUN pip install empy
 WORKDIR /root/ros/
 RUN git clone --recursive https://github.com/sarubito/kobuki.git
 ## ROS関係のパッケージに依存するパッケージのインストール
-#RUN rosdep install -r --from-path src --ignore-src
+RUN apt update
+RUN mv /bin/sh /bin/sh_tmp && ln -s /bin/bash /bin/sh
+RUN source ~/.bashrc
+RUN rosdep install -r --from-path kobuki/catkin_ws/src --ignore-src --rosdistro melodic
+RUN rm /bin/sh &&mv /bin/sh_tmp /bin/sh
+RUN rm -rf /vat/lib/apt/list/*
